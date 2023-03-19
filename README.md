@@ -13,7 +13,7 @@ Whats implemented?
   10. Code Cleanup & Folder structure - pending until project fully finish
   11. Firebase login - pending for now.
   
-#[NOTE]
+# [NOTE]
 There's not much difference between RestAPI and GraphQL API. Main difference is following:
   1. Rest -> Controller = GraphQL -> Mutation/Queries/Subscription
   2. Single endpoint "/graphql", and request be like query/mutation {functionName (input: optional) {return field(s)}}.
