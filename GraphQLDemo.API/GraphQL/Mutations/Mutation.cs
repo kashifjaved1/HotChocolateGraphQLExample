@@ -1,14 +1,6 @@
-﻿using GraphQLDemo.API.Models;
-using GraphQLDemo.API.Models.Domain;
+﻿using GraphQLDemo.API.Models.Entities;
 using GraphQLDemo.API.Repositories;
-using GraphQLDemo.API.GraphQL.Queries;
-using GraphQLDemo.API.GraphQL.Subscriptions;
-using HotChocolate;
-using HotChocolate.Subscriptions;
-using Microsoft.EntityFrameworkCore;
 using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
 
 namespace GraphQLDemo.API.GraphQL.Mutations

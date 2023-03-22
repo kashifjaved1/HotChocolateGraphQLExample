@@ -3,15 +3,15 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace GraphQLDemo.API.Models.Domain
+namespace GraphQLDemo.API.GraphQL.Types
 {
-    public class Student
+    public class InstructorType
     {
         public Guid Id { get; set; }
         public string FirstName { get; set; }
         public string LastName { get; set; }
-        public double GPA { get; set; }
+        public double Salary { get; set; }
 
-        public IEnumerable<Course> Courses { get; set; }
+        public IEnumerable<CourseType> Courses { get; set; }
     }
 }

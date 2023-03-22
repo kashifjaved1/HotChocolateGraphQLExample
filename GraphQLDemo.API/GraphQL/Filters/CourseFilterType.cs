@@ -1,4 +1,4 @@
-﻿using GraphQLDemo.API.Models.Domain;
+﻿using GraphQLDemo.API.Models.Entities;
 using HotChocolate.Data.Filters;
 
 namespace GraphQLDemo.API.GraphQL.Filters

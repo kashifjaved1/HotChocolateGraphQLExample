@@ -1,14 +1,8 @@
-﻿using GraphQLDemo.API.DataLoader;
-using GraphQLDemo.API.DTOs;
-using GraphQLDemo.API.Models.Common;
-using HotChocolate;
+﻿using GraphQLDemo.API.Models.Common;
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Threading;
-using System.Threading.Tasks;
 
-namespace GraphQLDemo.API.Models.Domain
+namespace GraphQLDemo.API.Models.Entities
 {
     public class Course
     {

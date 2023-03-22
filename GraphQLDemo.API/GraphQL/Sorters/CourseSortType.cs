@@ -1,5 +1,4 @@
-﻿using GraphQLDemo.API.Models.Domain;
-using HotChocolate;
+﻿using GraphQLDemo.API.Models.Entities;
 using HotChocolate.Data.Sorting;
 
 namespace GraphQLDemo.API.GraphQL.Sorters

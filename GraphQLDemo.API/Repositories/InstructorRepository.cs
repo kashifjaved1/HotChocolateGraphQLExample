@@ -1,5 +1,5 @@
 ﻿using GraphQLDemo.API.Models;
-using GraphQLDemo.API.Models.Domain;
+using GraphQLDemo.API.Models.Entities;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;

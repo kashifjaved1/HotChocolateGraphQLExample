@@ -1,4 +1,4 @@
-﻿using GraphQLDemo.API.Models.Domain;
+﻿using GraphQLDemo.API.Models.Entities;
 using Microsoft.EntityFrameworkCore;
 
 namespace GraphQLDemo.API.Models

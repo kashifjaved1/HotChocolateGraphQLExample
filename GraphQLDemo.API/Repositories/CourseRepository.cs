@@ -1,11 +1,8 @@
-﻿using GraphQLDemo.API.DTOs;
-using GraphQLDemo.API.Models;
-using GraphQLDemo.API.Models.Domain;
+﻿using GraphQLDemo.API.Models;
+using GraphQLDemo.API.Models.Entities;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Reflection.Metadata.Ecma335;
 using System.Threading.Tasks;
 
 namespace GraphQLDemo.API.Repositories

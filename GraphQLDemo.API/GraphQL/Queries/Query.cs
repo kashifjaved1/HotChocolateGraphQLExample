@@ -1,7 +1,4 @@
-﻿using GraphQLDemo.API.DTOs;
-using GraphQLDemo.API.Models;
-using GraphQLDemo.API.Models.Common;
-using GraphQLDemo.API.Models.Domain;
+﻿using GraphQLDemo.API.Models;
 using GraphQLDemo.API.Models.Entities;
 using GraphQLDemo.API.Repositories;
 using GraphQLDemo.API.GraphQL.Filters;
@@ -13,6 +10,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using GraphQLDemo.API.GraphQL.Types;
 
 namespace GraphQLDemo.API.GraphQL.Queries
 {
@@ -44,9 +42,9 @@ namespace GraphQLDemo.API.GraphQL.Queries
         [UseProjection] 
         [UseFiltering(typeof(CourseFilterType))] // filter n removing/ignoring students property here using custom filter type.
         [UseSorting(typeof(CourseSortType))] // ignoring id based fields for sorting using custom sorter.
-        public IQueryable<CourseDTO> GetPaginatedCourses([ScopedService] SchoolDbContext context) // method dependency injection using scopedService attribute by HotChocolate.
+        public IQueryable<CourseType> GetPaginatedCourses([ScopedService] SchoolDbContext context) // method dependency injection using scopedService attribute by HotChocolate.
         {
-            return context.Courses.Select(c => new CourseDTO
+            return context.Courses.Select(c => new CourseType
             {
                 Id = c.Id,
                 Name = c.Name,
