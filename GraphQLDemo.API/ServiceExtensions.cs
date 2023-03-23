@@ -4,12 +4,20 @@ using GraphQLDemo.API.GraphQL.Mutations;
 using GraphQLDemo.API.GraphQL.Queries;
 using GraphQLDemo.API.GraphQL.Types;
 using GraphQLDemo.API.Models;
+using GraphQLDemo.API.Models.Entities;
 using GraphQLDemo.API.Repositories;
+using GraphQLDemo.API.Services.Implementation;
+using GraphQLDemo.API.Services.Interfaces;
 using GraphQLDemo.API.Validators;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.DependencyInjection.Extensions;
+using Microsoft.IdentityModel.Tokens;
 using System;
+using System.Text;
 
 namespace GraphQLDemo.API
 {
@@ -19,6 +27,14 @@ namespace GraphQLDemo.API
         {
             services.AddFluentValidation();
             services.AddTransient<CourseTypeInputValidator>();
+
+            services.AddCors(corsPolicy =>
+            {
+                corsPolicy.AddPolicy("AllowAll", builder =>
+                builder.AllowAnyOrigin()
+                .AllowAnyMethod()
+                .AllowAnyHeader());
+            });
 
             services.AddGraphQLServer()
                 .AddQueryType<Query>()
@@ -48,8 +64,54 @@ namespace GraphQLDemo.API
 
             services.AddScoped<CourseRepository>();
             services.AddScoped<InstructorRepository>();
+            #region workingOnIssueWithThisRegion
+            //services.AddScoped<IAuthManager, AuthManager>();
 
-            services.AddAuthentication();
+            //services.AddIdentity<ApiUser, IdentityRole>()
+            //    .AddDefaultTokenProviders()
+            //    .AddRoles<IdentityRole>()
+            //    .AddEntityFrameworkStores<SchoolDbContext>();
+
+            //services.Configure<IdentityOptions>(options =>
+            //{
+            //    options.Password.RequiredLength = 1;
+            //    options.Password.RequireDigit = false;
+            //    options.Password.RequireLowercase = false;
+            //    options.Password.RequireUppercase = false;
+            //    options.Password.RequireNonAlphanumeric = false;
+
+            //    options.Lockout.MaxFailedAccessAttempts = 2;
+            //    options.Lockout.DefaultLockoutTimeSpan = TimeSpan.FromSeconds(300);
+            //});
+
+            // configuring jwt
+            //var issuer = configuration["JWT:Issuer"];
+            //var audiance = configuration["JWT:Audiance"];
+            //var key = configuration["JWT:KEY"];
+
+            //services.AddAuthentication(
+            //    options =>
+            //    {
+            //        options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+            //        options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+            //    }
+            //)
+            //.AddJwtBearer(options =>
+            //{
+            //    options.RequireHttpsMetadata = false;
+            //    options.SaveToken = true;
+            //    options.TokenValidationParameters = new TokenValidationParameters
+            //    {
+            //        ValidIssuer = issuer,
+            //        ValidAudience = audiance,
+            //        IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(key)),
+            //    };
+            //});
+
+            // setting forgot, reset and change password token TTL
+            //services.Configure<DataProtectionTokenProviderOptions>(opt =>
+            //   opt.TokenLifespan = TimeSpan.FromHours(2));
+            #endregion
         }
     }
 }

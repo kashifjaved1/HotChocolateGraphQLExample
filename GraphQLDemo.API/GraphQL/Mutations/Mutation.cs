@@ -1,17 +1,70 @@
 ﻿using AppAny.HotChocolate.FluentValidation;
 using FluentValidation.Results;
+using GraphQLDemo.API.GraphQL.Types;
 using GraphQLDemo.API.Models.Entities;
 using GraphQLDemo.API.Repositories;
+using GraphQLDemo.API.Services.Interfaces;
 using GraphQLDemo.API.Validators;
 using HotChocolate;
 using HotChocolate.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using System;
+using System.Linq;
 using System.Threading.Tasks;
 
 namespace GraphQLDemo.API.GraphQL.Mutations
 {
     public class Mutation
     {
+        #region Account
+        //private readonly SignInManager<ApiUser> _signInManager;
+        //private readonly UserManager<ApiUser> _userManager;
+        //private readonly IAuthManager _authManager;
+        //private readonly RoleManager<IdentityRole> _roleManager;
+
+        //public Mutation(UserManager<ApiUser> userManager, SignInManager<ApiUser> signInManager, IAuthManager authManager, RoleManager<IdentityRole> roleManager)
+        //{
+        //    _userManager = userManager;
+        //    _signInManager = signInManager;
+        //    _authManager = authManager;
+        //    _roleManager = roleManager;
+        //}
+
+        //public async Task<bool> SignUp(SignupType signUp)
+        //{
+        //    var roles = await _roleManager.Roles.ToListAsync();
+        //    var isRoleExist = roles.FirstOrDefault(x => x.Name == signUp.Role) != null ? true : false;
+        //    if (isRoleExist)
+        //    {
+        //        if (await _userManager.FindByEmailAsync(signUp.Email) == null)
+        //        {
+        //            var user = new ApiUser
+        //            {
+        //                FullName = signUp.FullName,
+        //                UserName = signUp.Email,
+        //                Email = signUp.Email
+        //            };
+
+        //            var result = await _userManager.CreateAsync(user, signUp.Password);
+        //            user = await _userManager.FindByEmailAsync(signUp.Email);
+
+        //            if (result.Succeeded)
+        //            {
+        //                await _userManager.AddToRoleAsync(user, signUp.Role);
+        //            }
+
+        //            return true;
+        //        }
+
+        //        return false;
+        //    }
+
+        //    return false;
+        //}
+        #endregion
+
         private readonly CourseRepository _courseRepository;
         //private readonly CourseTypeInputValidator _courseTypeInputValidator; // manually adding validator this is way is odd approach.
 
