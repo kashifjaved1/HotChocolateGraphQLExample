@@ -10,7 +10,7 @@ using System.Threading.Tasks;
 
 namespace GraphQLDemo.API.GraphQL.Types
 {
-    public class CourseType
+    public class CourseType : ISearchResultType
     {
         public Guid Id { get; set; }
         [IsProjected(false)] // avoid unwanted field projection to database.

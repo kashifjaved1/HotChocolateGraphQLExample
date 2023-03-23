@@ -1,5 +1,6 @@
 ﻿using GraphQLDemo.API.Models.Entities;
 using GraphQLDemo.API.Repositories;
+using HotChocolate.AspNetCore.Authorization;
 using System;
 using System.Threading.Tasks;
 
@@ -14,6 +15,7 @@ namespace GraphQLDemo.API.GraphQL.Mutations
             _courseRepository = courseRepository;
         }
 
+        [Authorize]
         public async Task<CourseResult> CreateCourse(CourseTypeInput courseInput/*, [Service] ITopicEventSender topicEventSender*/)
         {
             Course course = new Course()
@@ -39,6 +41,7 @@ namespace GraphQLDemo.API.GraphQL.Mutations
             return result;
         }
 
+        [Authorize]
         public async Task<CourseResult> UpdateCourse(Guid id, CourseTypeInput courseInput/*, [Service] ITopicEventSender topicEventSender*/)
         {
             var isCourseExist = _courseRepository.FindCourseById(id) != null;
@@ -64,6 +67,7 @@ namespace GraphQLDemo.API.GraphQL.Mutations
             return new CourseResult();
         }
 
+        [Authorize]
         public async Task<bool> DeleteCourse(Guid id)
         {
             return await _courseRepository.DeleteCourse(id);

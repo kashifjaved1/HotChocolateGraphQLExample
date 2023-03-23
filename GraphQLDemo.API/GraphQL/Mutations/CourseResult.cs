@@ -1,14 +1,10 @@
-﻿using GraphQLDemo.API.Models;
+﻿using GraphQLDemo.API.GraphQL.Types;
 using GraphQLDemo.API.Models.Common;
-using GraphQLDemo.API.GraphQL.Queries;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 
 namespace GraphQLDemo.API.GraphQL.Mutations
 {
-    public class CourseResult
+    public class CourseResult : ISearchResultType
     {
         public Guid Id { get; set; }
         public string Name { get; set; }

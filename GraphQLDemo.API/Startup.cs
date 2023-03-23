@@ -1,20 +1,15 @@
 using GraphQLDemo.API.Models;
 using GraphQLDemo.API.Repositories;
-using GraphQLDemo.API.GraphQL;
 using GraphQLDemo.API.GraphQL.Mutations;
 using GraphQLDemo.API.GraphQL.Queries;
-using GraphQLDemo.API.GraphQL.Subscriptions;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+using GraphQLDemo.API.GraphQL.Types;
 
 namespace GraphQLDemo.API
 {
@@ -32,11 +27,14 @@ namespace GraphQLDemo.API
             services.AddGraphQLServer()
                 .AddQueryType<Query>()
                 .AddMutationType<Mutation>()
+                //.AddSubscriptionType<Subscription>()
+                .AddType<InstructorType>()
+                .AddType<CourseType>()
+                .AddTypeExtension<CourseQuery>() // use registering extended/extension types
                 .AddFiltering() // for adding data filteration
-                .AddSorting() // for sorting.
+                .AddSorting() // for sorting
                 .AddProjections()
-                .AddAuthorization(); // for avoiding over-fetching.
-                // .AddSubscriptionType<Subscription>();
+                .AddAuthorization(); // for avoiding over-fetching
 
             // services.AddInMemorySubscriptions();
 
