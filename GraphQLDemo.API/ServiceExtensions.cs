@@ -31,7 +31,10 @@ namespace GraphQLDemo.API
                 .AddSorting() // for sorting
                 .AddProjections() // for avoiding over-fetching
                 .AddAuthorization()
-                .AddFluentValidation(); // registering appany pkg with graphQL server
+                .AddFluentValidation(o =>
+                 {
+                     o.UseDefaultErrorMapper();
+                 }); // registering Appany fluentValidation extensions method
 
             // services.AddInMemorySubscriptions();
 
