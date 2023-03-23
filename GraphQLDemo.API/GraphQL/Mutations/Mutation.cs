@@ -1,5 +1,9 @@
-﻿using GraphQLDemo.API.Models.Entities;
+﻿using AppAny.HotChocolate.FluentValidation;
+using FluentValidation.Results;
+using GraphQLDemo.API.Models.Entities;
 using GraphQLDemo.API.Repositories;
+using GraphQLDemo.API.Validators;
+using HotChocolate;
 using HotChocolate.AspNetCore.Authorization;
 using System;
 using System.Threading.Tasks;
@@ -9,18 +13,21 @@ namespace GraphQLDemo.API.GraphQL.Mutations
     public class Mutation
     {
         private readonly CourseRepository _courseRepository;
+        //private readonly CourseTypeInputValidator _courseTypeInputValidator; // manually adding validator this is way is odd approach.
 
-        public Mutation(CourseRepository courseRepository)
+        public Mutation(CourseRepository courseRepository/*, CourseTypeInputValidator courseTypeInputValidator*/) // using validator manually
         {
             _courseRepository = courseRepository;
+            //_courseTypeInputValidator = courseTypeInputValidator; // using validator manually
         }
 
         [Authorize]
-        public async Task<CourseResult> CreateCourse(CourseTypeInput courseInput/*, [Service] ITopicEventSender topicEventSender*/)
+        public async Task<CourseResult> CreateCourse([UseFluentValidation, UseValidator(typeof(CourseTypeInputValidator))] CourseTypeInput courseInput/*, [Service] ITopicEventSender topicEventSender*/) // [UseFluentValidation, UseValidator] attribute (method DI injection) from appany pkg will apply the validator automatically.
         {
+            //Validate(courseInput); // using validator manually
+
             Course course = new Course()
             {
-                //Id = Guid.NewGuid(),
                 Name = courseInput.Name,
                 Subject = courseInput.Subject,
                 InstructorId = courseInput.InstructorId
@@ -42,8 +49,10 @@ namespace GraphQLDemo.API.GraphQL.Mutations
         }
 
         [Authorize]
-        public async Task<CourseResult> UpdateCourse(Guid id, CourseTypeInput courseInput/*, [Service] ITopicEventSender topicEventSender*/)
+        public async Task<CourseResult> UpdateCourse(Guid id, [UseFluentValidation, UseValidator(typeof(CourseTypeInputValidator))] CourseTypeInput courseInput/*, [Service] ITopicEventSender topicEventSender*/)
         {
+            //Validate(courseInput); // using validator manually
+
             var isCourseExist = _courseRepository.FindCourseById(id) != null;
             if (isCourseExist)
             {
@@ -72,5 +81,11 @@ namespace GraphQLDemo.API.GraphQL.Mutations
         {
             return await _courseRepository.DeleteCourse(id);
         }
+
+        //private void Validate(CourseTypeInput input)
+        //{
+        //    ValidationResult validationResult = _courseTypeInputValidator.Validate(input);
+        //    if (!validationResult.IsValid) throw new GraphQLException("Invalid Input");
+        //}
     }
 }

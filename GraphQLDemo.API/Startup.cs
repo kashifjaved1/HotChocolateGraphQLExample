@@ -10,6 +10,8 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using System;
 using GraphQLDemo.API.GraphQL.Types;
+using FluentValidation.AspNetCore;
+using GraphQLDemo.API.Validators;
 
 namespace GraphQLDemo.API
 {
@@ -24,32 +26,7 @@ namespace GraphQLDemo.API
 
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddGraphQLServer()
-                .AddQueryType<Query>()
-                .AddMutationType<Mutation>()
-                //.AddSubscriptionType<Subscription>()
-                .AddType<InstructorType>()
-                .AddType<CourseType>()
-                .AddTypeExtension<CourseQuery>() // use registering extended/extension types
-                .AddFiltering() // for adding data filteration
-                .AddSorting() // for sorting
-                .AddProjections()
-                .AddAuthorization(); // for avoiding over-fetching
-
-            // services.AddInMemorySubscriptions();
-
-            string connectionString = _configuration.GetConnectionString("default");
-            services.AddPooledDbContextFactory<SchoolDbContext>(o => 
-                o.UseSqlite(connectionString)
-                .LogTo(Console.WriteLine) // to log db queries to console.
-            ); // added dbcontext pool to avoid collision of parallel running graphQL resolvers.
-
-            // services.AddPooledDbContextFactory<SchoolDbContext>(o => o.UseSqlServer(connectionString));
-
-            services.AddScoped<CourseRepository>();
-            services.AddScoped<InstructorRepository>();
-
-            services.AddAuthentication();
+            services.ProjectSettings(_configuration);
         }
 
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
