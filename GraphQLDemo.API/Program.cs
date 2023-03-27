@@ -3,6 +3,8 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using Serilog;
+using Serilog.Events;
 
 namespace GraphQLDemo.API
 {
@@ -10,27 +12,40 @@ namespace GraphQLDemo.API
     {
         public static void Main(string[] args)
         {
-            IHost host = CreateHostBuilder(args).Build();
+            // Configured Serilog
+            // configured serilog below.
+            Log.Logger = new LoggerConfiguration()
+                .WriteTo.File(
+                    path: ".\\debugLogs\\log-.txt",
+                    outputTemplate: "{Timestamp: yyyy-MM-dd HH:mm:ss.fff zzz} [{Level: u3}] {Message: lj}{NewLine}{Exception}",
+                    rollingInterval: RollingInterval.Day,
+                    restrictedToMinimumLevel: LogEventLevel.Information
+                ).CreateLogger();
 
-            using (IServiceScope scope = host.Services.CreateScope())
-            {
-                IDbContextFactory<SchoolDbContext> contextFactory =
-                    scope.ServiceProvider.GetRequiredService<IDbContextFactory<SchoolDbContext>>();
+            //IHost host = CreateHostBuilder(args).Build();
 
-                using (SchoolDbContext context = contextFactory.CreateDbContext())
-                {
-                    context.Database.Migrate();
-                }
-            }
+            //using (IServiceScope scope = host.Services.CreateScope())
+            //{
+            //    IDbContextFactory<SchoolDbContext> contextFactory =
+            //        scope.ServiceProvider.GetRequiredService<IDbContextFactory<SchoolDbContext>>();
 
-            host.Run();
+            //    using (SchoolDbContext context = contextFactory.CreateDbContext())
+            //    {
+            //        context.Database.Migrate();
+            //    }
+            //}
+
+            //host.Run();
+
+            CreateHostBuilder(args).Build().Run();
         }
 
         public static IHostBuilder CreateHostBuilder(string[] args) =>
             Host.CreateDefaultBuilder(args)
-                .ConfigureWebHostDefaults(webBuilder =>
-                {
-                    webBuilder.UseStartup<Startup>();
-                });
+            .UseSerilog()
+            .ConfigureWebHostDefaults(webBuilder =>
+            {
+                webBuilder.UseStartup<Startup>();
+            });
     }
 }

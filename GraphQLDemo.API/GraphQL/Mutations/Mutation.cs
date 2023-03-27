@@ -19,60 +19,57 @@ namespace GraphQLDemo.API.GraphQL.Mutations
     public class Mutation
     {
         #region Account
-        //private readonly SignInManager<ApiUser> _signInManager;
-        //private readonly UserManager<ApiUser> _userManager;
-        //private readonly IAuthManager _authManager;
-        //private readonly RoleManager<IdentityRole> _roleManager;
-
-        //public Mutation(UserManager<ApiUser> userManager, SignInManager<ApiUser> signInManager, IAuthManager authManager, RoleManager<IdentityRole> roleManager)
-        //{
-        //    _userManager = userManager;
-        //    _signInManager = signInManager;
-        //    _authManager = authManager;
-        //    _roleManager = roleManager;
-        //}
-
-        //public async Task<bool> SignUp(SignupType signUp)
-        //{
-        //    var roles = await _roleManager.Roles.ToListAsync();
-        //    var isRoleExist = roles.FirstOrDefault(x => x.Name == signUp.Role) != null ? true : false;
-        //    if (isRoleExist)
-        //    {
-        //        if (await _userManager.FindByEmailAsync(signUp.Email) == null)
-        //        {
-        //            var user = new ApiUser
-        //            {
-        //                FullName = signUp.FullName,
-        //                UserName = signUp.Email,
-        //                Email = signUp.Email
-        //            };
-
-        //            var result = await _userManager.CreateAsync(user, signUp.Password);
-        //            user = await _userManager.FindByEmailAsync(signUp.Email);
-
-        //            if (result.Succeeded)
-        //            {
-        //                await _userManager.AddToRoleAsync(user, signUp.Role);
-        //            }
-
-        //            return true;
-        //        }
-
-        //        return false;
-        //    }
-
-        //    return false;
-        //}
-        #endregion
+        private readonly SignInManager<ApiUser> _signInManager;
+        private readonly UserManager<ApiUser> _userManager;
+        private readonly IAuthManager _authManager;
+        private readonly RoleManager<IdentityRole> _roleManager;
 
         private readonly CourseRepository _courseRepository;
         //private readonly CourseTypeInputValidator _courseTypeInputValidator; // manually adding validator this is way is odd approach.
 
-        public Mutation(CourseRepository courseRepository/*, CourseTypeInputValidator courseTypeInputValidator*/) // using validator manually
+        public Mutation(UserManager<ApiUser> userManager, SignInManager<ApiUser> signInManager, IAuthManager authManager, RoleManager<IdentityRole> roleManager, CourseRepository courseRepository/*, CourseTypeInputValidator courseTypeInputValidator*/) // using validator manually)
         {
+            _userManager = userManager;
+            _signInManager = signInManager;
+            _authManager = authManager;
+            _roleManager = roleManager;
+
             _courseRepository = courseRepository;
             //_courseTypeInputValidator = courseTypeInputValidator; // using validator manually
         }
+
+        public async Task<bool> SignUp(SignupType signUp)
+        {
+            var roles = await _roleManager.Roles.ToListAsync();
+            var isRoleExist = roles.FirstOrDefault(x => x.Name == signUp.Role) != null ? true : false;
+            if (isRoleExist)
+            {
+                if (await _userManager.FindByEmailAsync(signUp.Email) == null)
+                {
+                    var user = new ApiUser
+                    {
+                        FullName = signUp.FullName,
+                        UserName = signUp.Email,
+                        Email = signUp.Email
+                    };
+
+                    var result = await _userManager.CreateAsync(user, signUp.Password);
+                    user = await _userManager.FindByEmailAsync(signUp.Email);
+
+                    if (result.Succeeded)
+                    {
+                        await _userManager.AddToRoleAsync(user, signUp.Role);
+                    }
+
+                    return true;
+                }
+
+                return false;
+            }
+
+            return false;
+        }
+        #endregion
 
         [Authorize]
         public async Task<CourseResult> CreateCourse([UseFluentValidation, UseValidator(typeof(CourseTypeInputValidator))] CourseTypeInput courseInput/*, [Service] ITopicEventSender topicEventSender*/) // [UseFluentValidation, UseValidator] attribute (method DI injection) from appany pkg will apply the validator automatically.

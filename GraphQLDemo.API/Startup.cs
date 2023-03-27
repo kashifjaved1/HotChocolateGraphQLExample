@@ -32,7 +32,7 @@ namespace GraphQLDemo.API
             app.UseRouting();
 
             app.UseAuthentication();
-            //app.UseAuthorization();
+            app.UseAuthorization();
 
             app.UseWebSockets();
 

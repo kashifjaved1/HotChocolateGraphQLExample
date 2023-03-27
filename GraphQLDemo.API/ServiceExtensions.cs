@@ -55,62 +55,68 @@ namespace GraphQLDemo.API
             // services.AddInMemorySubscriptions();
 
             string connectionString = configuration.GetConnectionString("default");
-            services.AddPooledDbContextFactory<SchoolDbContext>(o =>
-                o.UseSqlite(connectionString)
-                .LogTo(Console.WriteLine) // to log db queries to console.
-            ); // added dbcontext pool to avoid collision of parallel running graphQL resolvers.
+            //services.AddPooledDbContextFactory<SchoolDbContext>(o =>
+            //    o.UseSqlite(connectionString)
+            //    .LogTo(Console.WriteLine) // to log db queries to console.
+            //); // added dbcontext pool to avoid collision of parallel running graphQL resolvers.
 
-            // services.AddPooledDbContextFactory<SchoolDbContext>(o => o.UseSqlServer(connectionString));
+            services.AddDbContext<SchoolDbContext>(o => o.UseSqlite(connectionString));
 
             services.AddScoped<CourseRepository>();
             services.AddScoped<InstructorRepository>();
+
             #region workingOnIssueWithThisRegion
-            //services.AddScoped<IAuthManager, AuthManager>();
+            services.AddScoped<IAuthManager, AuthManager>();
+            services.AddIdentity<ApiUser, IdentityRole>()
+                .AddDefaultTokenProviders()
+                .AddRoles<IdentityRole>()
+                .AddEntityFrameworkStores<SchoolDbContext>();
+            services.Configure<IdentityOptions>(options =>
+            {
+                options.Password.RequiredLength = 1;
+                options.Password.RequireDigit = false;
+                options.Password.RequireLowercase = false;
+                options.Password.RequireUppercase = false;
+                options.Password.RequireNonAlphanumeric = false;
 
-            //services.AddIdentity<ApiUser, IdentityRole>()
-            //    .AddDefaultTokenProviders()
-            //    .AddRoles<IdentityRole>()
-            //    .AddEntityFrameworkStores<SchoolDbContext>();
-
-            //services.Configure<IdentityOptions>(options =>
-            //{
-            //    options.Password.RequiredLength = 1;
-            //    options.Password.RequireDigit = false;
-            //    options.Password.RequireLowercase = false;
-            //    options.Password.RequireUppercase = false;
-            //    options.Password.RequireNonAlphanumeric = false;
-
-            //    options.Lockout.MaxFailedAccessAttempts = 2;
-            //    options.Lockout.DefaultLockoutTimeSpan = TimeSpan.FromSeconds(300);
-            //});
+                options.Lockout.MaxFailedAccessAttempts = 2;
+                options.Lockout.DefaultLockoutTimeSpan = TimeSpan.FromSeconds(300);
+            });
+            services.ConfigureApplicationCookie(options =>
+            {
+                options.LoginPath = "/Account/Login";
+                options.AccessDeniedPath = "/Account/AccessDenied";
+                options.ExpireTimeSpan = TimeSpan.FromDays(1);
+            });
 
             // configuring jwt
-            //var issuer = configuration["JWT:Issuer"];
-            //var audiance = configuration["JWT:Audiance"];
-            //var key = configuration["JWT:KEY"];
+            var issuer = configuration["JWT:Issuer"];
+            var audiance = configuration["JWT:Audiance"];
+            var key = configuration["JWT:KEY"];
 
-            //services.AddAuthentication(
-            //    options =>
-            //    {
-            //        options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
-            //        options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
-            //    }
-            //)
-            //.AddJwtBearer(options =>
-            //{
-            //    options.RequireHttpsMetadata = false;
-            //    options.SaveToken = true;
-            //    options.TokenValidationParameters = new TokenValidationParameters
-            //    {
-            //        ValidIssuer = issuer,
-            //        ValidAudience = audiance,
-            //        IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(key)),
-            //    };
-            //});
-
+            services.AddAuthentication(
+                options =>
+                {
+                    options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+                    options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+                }
+            )
+            .AddJwtBearer(options =>
+            {
+                options.RequireHttpsMetadata = false;
+                options.SaveToken = true;
+                options.TokenValidationParameters = new TokenValidationParameters
+                {
+                    ValidIssuer = issuer,
+                    ValidAudience = audiance,
+                    IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(key)),
+                };
+            });
+            services.AddAuthorization();
             // setting forgot, reset and change password token TTL
-            //services.Configure<DataProtectionTokenProviderOptions>(opt =>
-            //   opt.TokenLifespan = TimeSpan.FromHours(2));
+            services.Configure<DataProtectionTokenProviderOptions>(opt =>
+               opt.TokenLifespan = TimeSpan.FromHours(2));
+
             #endregion
         }
     }
