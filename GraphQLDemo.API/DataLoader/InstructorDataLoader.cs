@@ -1,5 +1,5 @@
 ﻿using GraphQLDemo.API.Models.Entities;
-using GraphQLDemo.API.Repositories;
+using GraphQLDemo.API.Repositories.Implementation;
 using GreenDonut;
 using HotChocolate.DataLoader;
 using System;

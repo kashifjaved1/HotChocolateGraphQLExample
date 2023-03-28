@@ -5,7 +5,8 @@ using GraphQLDemo.API.GraphQL.Queries;
 using GraphQLDemo.API.GraphQL.Types;
 using GraphQLDemo.API.Models;
 using GraphQLDemo.API.Models.Entities;
-using GraphQLDemo.API.Repositories;
+using GraphQLDemo.API.Repositories.Implementation;
+using GraphQLDemo.API.Services.Helpers;
 using GraphQLDemo.API.Services.Implementation;
 using GraphQLDemo.API.Services.Interfaces;
 using GraphQLDemo.API.Validators;
@@ -48,29 +49,26 @@ namespace GraphQLDemo.API
                 .AddProjections() // for avoiding over-fetching
                 .AddAuthorization()
                 .AddFluentValidation(o =>
-                 {
-                     o.UseDefaultErrorMapper();
-                 }); // registering Appany fluentValidation extensions method
+                {
+                    o.UseDefaultErrorMapper();
+                }); // registering Appany fluentValidation extensions method
 
             // services.AddInMemorySubscriptions();
 
             string connectionString = configuration.GetConnectionString("default");
-            //services.AddPooledDbContextFactory<SchoolDbContext>(o =>
-            //    o.UseSqlite(connectionString)
-            //    .LogTo(Console.WriteLine) // to log db queries to console.
-            //); // added dbcontext pool to avoid collision of parallel running graphQL resolvers.
-
-            services.AddDbContext<SchoolDbContext>(o => o.UseSqlite(connectionString));
 
             services.AddScoped<CourseRepository>();
             services.AddScoped<InstructorRepository>();
 
-            #region workingOnIssueWithThisRegion
             services.AddScoped<IAuthManager, AuthManager>();
+
             services.AddIdentity<ApiUser, IdentityRole>()
                 .AddDefaultTokenProviders()
                 .AddRoles<IdentityRole>()
                 .AddEntityFrameworkStores<SchoolDbContext>();
+
+            services.AddDbContext<SchoolDbContext>(o => o.UseSqlite(connectionString));
+
             services.Configure<IdentityOptions>(options =>
             {
                 options.Password.RequiredLength = 1;
@@ -113,11 +111,17 @@ namespace GraphQLDemo.API
                 };
             });
             services.AddAuthorization();
+
             // setting forgot, reset and change password token TTL
             services.Configure<DataProtectionTokenProviderOptions>(opt =>
                opt.TokenLifespan = TimeSpan.FromHours(2));
 
-            #endregion
+            // configuring email here.
+            var emailConfig = configuration
+                .GetSection("EmailConfiguration")
+                .Get<EmailConfiguration>();
+            services.AddSingleton(emailConfig);
+            services.AddScoped<IEmailSender, EmailSender>();
         }
     }
 }

@@ -2,7 +2,7 @@
 using FluentValidation.Results;
 using GraphQLDemo.API.GraphQL.Types;
 using GraphQLDemo.API.Models.Entities;
-using GraphQLDemo.API.Repositories;
+using GraphQLDemo.API.Repositories.Implementation;
 using GraphQLDemo.API.Services.Interfaces;
 using GraphQLDemo.API.Validators;
 using HotChocolate;
@@ -71,7 +71,7 @@ namespace GraphQLDemo.API.GraphQL.Mutations
         }
         #endregion
 
-        [Authorize]
+        [Authorize] // from hotChocolate
         public async Task<CourseResult> CreateCourse([UseFluentValidation, UseValidator(typeof(CourseTypeInputValidator))] CourseTypeInput courseInput/*, [Service] ITopicEventSender topicEventSender*/) // [UseFluentValidation, UseValidator] attribute (method DI injection) from appany pkg will apply the validator automatically.
         {
             //Validate(courseInput); // using validator manually
@@ -130,6 +130,18 @@ namespace GraphQLDemo.API.GraphQL.Mutations
         public async Task<bool> DeleteCourse(Guid id)
         {
             return await _courseRepository.DeleteCourse(id);
+        }
+
+        [Authorize]
+        public async Task<bool> ChangePassword(ChangePasswordType changePassword)
+        {
+            var user = await _userManager.FindByEmailAsync(changePassword.Email) ?? throw new GraphQLException("User doesn't exist");
+            var token = await _userManager.GeneratePasswordResetTokenAsync(user);
+
+            var resetPassResult = await _userManager.ResetPasswordAsync(user, token, changePassword.Password);
+
+            if (resetPassResult.Succeeded) return true;
+            return false;
         }
 
         //private void Validate(CourseTypeInput input)

@@ -39,6 +39,7 @@ namespace GraphQLDemo.API.Services.Implementation
         {
             var claims = new List<Claim>
             {
+                new Claim(ClaimTypes.Sid, _user.Id),
                 new Claim(ClaimTypes.Name, _user.FullName),
                 new Claim(ClaimTypes.Email, _user.Email),
             };

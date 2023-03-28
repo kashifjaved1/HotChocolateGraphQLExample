@@ -10,22 +10,85 @@ using GraphQLDemo.API.Models.Entities;
 using GraphQLDemo.API.Services.Interfaces;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using HotChocolate.AspNetCore.Authorization;
+using GraphQLDemo.API.Services.Helpers;
+using Org.BouncyCastle.Asn1.Ocsp;
+using System.Security.Policy;
+using Newtonsoft.Json.Linq;
 
 namespace GraphQLDemo.API.GraphQL.Queries
 {
     public class Query
     {
+        private readonly UserManager<ApiUser> _userManager;
         private readonly IAuthManager _authManager;
+        private readonly SignInManager<ApiUser> _signInManager;
+        private readonly IEmailSender _emailSender;
+        private readonly RoleManager<IdentityRole> _roleManager;
 
-        public Query(IAuthManager authManager)
+        public Query(IAuthManager authManager, SignInManager<ApiUser> signInManager, RoleManager<IdentityRole> roleManager, IEmailSender emailSender, UserManager<ApiUser> userManager)
         {
             _authManager = authManager;
+            _signInManager = signInManager;
+            _roleManager = roleManager;
+            _emailSender = emailSender;
+            _userManager = userManager;
         }
 
         public async Task<string> Login(LoginType login)
         {
             if (!await _authManager.ValidateUser(login)) return null;
             return await _authManager.CreateToken();
+        }
+
+        public async Task<bool> Logout()
+        {
+            await _signInManager.SignOutAsync();
+            return true;
+        }
+
+        public async Task<bool> ForgotPassword(ResetPasswordType resetPassword)
+        {
+            var user = await _userManager.FindByEmailAsync(resetPassword.Email);
+            if (user == null)
+            {
+                //return false;
+            }
+            var token = await _userManager.GeneratePasswordResetTokenAsync(user);
+            var callback = "http://mydomain.com/resetPasswordPage?token=" + token + "&email=" + user.Email; // can be localhost for testing purposes on local machine.
+
+            var message = new Message(new string[] { user.Email }, "Reset password token", callback, null);
+            await _emailSender.SendEmailAsync(message);
+
+            return true;
+        }
+
+        public async Task<bool> ResetPassword(ResetPasswordType resetPassword)
+        {
+            var user = await _userManager.FindByEmailAsync(resetPassword.Email);
+            if (user == null)
+            {
+                return false;
+            }
+
+            var resetPassResult = await _userManager.ResetPasswordAsync(user, resetPassword.Token, resetPassword.Password);
+            if (!resetPassResult.Succeeded)
+            {
+                return false;
+            }
+
+            return true;
+        }
+
+        public async Task<bool> DeleteAccount(string Id)
+        {
+            var user = await _userManager.FindByIdAsync(Id);
+            if (user != null)
+            {
+                await _userManager.DeleteAsync(user);
+                return true;
+            }
+            return false;
         }
 
         // All Course relevant queries are segregated and organized to their own courseQuery class.
