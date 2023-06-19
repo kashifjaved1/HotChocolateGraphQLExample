@@ -6,7 +6,7 @@ namespace GraphQLDemo.API.Models.Entities
 {
     public class Course
     {
-        public Guid Id { get; set; }
+        public Guid Id { get; set; } = Guid.NewGuid();
         public string Name { get; set; }
         public Subject Subject { get; set; }
 

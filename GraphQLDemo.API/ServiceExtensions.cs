@@ -26,6 +26,16 @@ namespace GraphQLDemo.API
     {
         public static void ProjectSettings(this IServiceCollection services, IConfiguration configuration)
         {
+            services.AddScoped<IAuthManager, AuthManager>();
+
+            string connectionString = configuration.GetConnectionString("default");
+            services.AddDbContext<SchoolDbContext>(o => o.UseSqlite(connectionString));
+
+            services.AddIdentity<ApiUser, IdentityRole>()
+                .AddDefaultTokenProviders()
+                .AddRoles<IdentityRole>()
+                .AddEntityFrameworkStores<SchoolDbContext>();
+
             services.AddFluentValidation();
             services.AddTransient<CourseTypeInputValidator>();
 
@@ -54,20 +64,9 @@ namespace GraphQLDemo.API
                 }); // registering Appany fluentValidation extensions method
 
             // services.AddInMemorySubscriptions();
-
-            string connectionString = configuration.GetConnectionString("default");
-
+            
             services.AddScoped<CourseRepository>();
             services.AddScoped<InstructorRepository>();
-
-            services.AddScoped<IAuthManager, AuthManager>();
-
-            services.AddIdentity<ApiUser, IdentityRole>()
-                .AddDefaultTokenProviders()
-                .AddRoles<IdentityRole>()
-                .AddEntityFrameworkStores<SchoolDbContext>();
-
-            services.AddDbContext<SchoolDbContext>(o => o.UseSqlite(connectionString));
 
             services.Configure<IdentityOptions>(options =>
             {
