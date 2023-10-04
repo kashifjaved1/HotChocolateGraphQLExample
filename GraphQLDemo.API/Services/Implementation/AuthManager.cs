@@ -1,15 +1,18 @@
-﻿using GraphQLDemo.API.Models.Entities;
+﻿using GraphQLDemo.API.GraphQL.Types;
+using GraphQLDemo.API.Helpers;
+using GraphQLDemo.API.Models;
+using GraphQLDemo.API.Models.Entities;
 using GraphQLDemo.API.Services.Interfaces;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Configuration;
+using Microsoft.IdentityModel.Tokens;
+using System;
 using System.Collections.Generic;
+using System.IdentityModel.Tokens.Jwt;
+using System.Linq;
 using System.Security.Claims;
 using System.Text;
 using System.Threading.Tasks;
-using System;
-using Microsoft.IdentityModel.Tokens;
-using System.IdentityModel.Tokens.Jwt;
-using GraphQLDemo.API.GraphQL.Types;
 
 namespace GraphQLDemo.API.Services.Implementation
 {
@@ -50,6 +53,12 @@ namespace GraphQLDemo.API.Services.Implementation
                 claims.Add(new Claim(ClaimTypes.Role, role));
             }
 
+            var permissions = GetUserValidPermissions(new() { "create", "view" });
+            foreach (var permission in permissions)
+            {
+                claims.Add(new Claim("Permissions", permission));
+            }
+
             return claims;
         }
 
@@ -78,6 +87,23 @@ namespace GraphQLDemo.API.Services.Implementation
         {
             _user = await _userManager.FindByEmailAsync(login.Email);
             return _user != null && await _userManager.CheckPasswordAsync(_user, login.Password);
+        }
+
+        private List<string> GetUserValidPermissions(List<string> permissions)
+        {
+            permissions = Commons.CapsFirstLetter(permissions);
+
+            var _permissions = Permissions.GetAllPermissions();
+
+            var userPermissions = permissions
+            .Where(p => _permissions.Contains($"Permissions.{p}", StringComparer.OrdinalIgnoreCase))
+            .ToList();
+
+            var userLongPermissions = _permissions
+            .Where(p => permissions.Contains(p.Replace("Permissions.", ""), StringComparer.OrdinalIgnoreCase))
+            .ToList();
+
+            return userPermissions;
         }
     }
 }

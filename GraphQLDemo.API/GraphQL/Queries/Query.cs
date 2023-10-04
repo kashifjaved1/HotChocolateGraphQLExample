@@ -1,20 +1,17 @@
-﻿using GraphQLDemo.API.Models;
+﻿using GraphQLDemo.API.Attributes;
+using GraphQLDemo.API.GraphQL.Types;
+using GraphQLDemo.API.Models;
+using GraphQLDemo.API.Models.Entities;
+using GraphQLDemo.API.Services.Helpers;
+using GraphQLDemo.API.Services.Interfaces;
 using HotChocolate;
+using HotChocolate.AspNetCore.Authorization;
 using HotChocolate.Data;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using GraphQLDemo.API.GraphQL.Types;
-using Microsoft.EntityFrameworkCore;
-using GraphQLDemo.API.Models.Entities;
-using GraphQLDemo.API.Services.Interfaces;
-using Microsoft.AspNetCore.Identity;
-using Microsoft.AspNetCore.Mvc;
-using HotChocolate.AspNetCore.Authorization;
-using GraphQLDemo.API.Services.Helpers;
-using Org.BouncyCastle.Asn1.Ocsp;
-using System.Security.Policy;
-using Newtonsoft.Json.Linq;
 
 namespace GraphQLDemo.API.GraphQL.Queries
 {
@@ -41,6 +38,7 @@ namespace GraphQLDemo.API.GraphQL.Queries
             return await _authManager.CreateToken();
         }
 
+        [Authorize]
         public async Task<bool> Logout()
         {
             await _signInManager.SignOutAsync();
