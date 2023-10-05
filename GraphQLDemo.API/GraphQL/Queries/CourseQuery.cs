@@ -11,6 +11,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using System;
 using GraphQLDemo.API.Repositories.Implementation;
+using GraphQLDemo.API.Attributes;
 
 namespace GraphQLDemo.API.GraphQL.Queries
 {
@@ -24,6 +25,7 @@ namespace GraphQLDemo.API.GraphQL.Queries
             _courseRepostory = courseRepostory;
         }
 
+        [HasRolesPermissions("SuperAdmin", "Moderator", "Admin", "Permissions.View")]
         //[UsePaging] // for enabling cursor based edges -> node pagination. Its a recommended one.
         [UsePaging(IncludeTotalCount = true, DefaultPageSize = 10)]
         public async Task<List<Course>> GetCourses()

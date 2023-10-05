@@ -1,5 +1,4 @@
-﻿using GraphQLDemo.API.Attributes;
-using GraphQLDemo.API.GraphQL.Types;
+﻿using GraphQLDemo.API.GraphQL.Types;
 using GraphQLDemo.API.Models;
 using GraphQLDemo.API.Models.Entities;
 using GraphQLDemo.API.Services.Helpers;

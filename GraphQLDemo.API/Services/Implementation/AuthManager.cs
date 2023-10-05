@@ -98,12 +98,12 @@ namespace GraphQLDemo.API.Services.Implementation
             var userPermissions = permissions
             .Where(p => _permissions.Contains($"Permissions.{p}", StringComparer.OrdinalIgnoreCase))
             .ToList();
-
+            // OR
             var userLongPermissions = _permissions
             .Where(p => permissions.Contains(p.Replace("Permissions.", ""), StringComparer.OrdinalIgnoreCase))
             .ToList();
 
-            return userPermissions;
+            return userLongPermissions;
         }
     }
 }
