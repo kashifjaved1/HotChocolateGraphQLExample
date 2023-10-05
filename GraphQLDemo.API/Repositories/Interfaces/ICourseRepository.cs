@@ -1,7 +1,7 @@
-﻿using GraphQLDemo.API.Models.Entities;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Threading.Tasks;
 using System;
+using GraphQLDemo.API.Data.Entities;
 
 namespace GraphQLDemo.API.Repositories.Interfaces
 {

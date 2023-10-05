@@ -1,9 +1,11 @@
-﻿using GraphQLDemo.API.Models.Entities;
+﻿using GraphQLDemo.API.Data.Entities;
+using GraphQLDemo.API.Helpers;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
+using System;
 
-namespace GraphQLDemo.API.Models
+namespace GraphQLDemo.API.Data
 {
     public class SchoolDbContext : IdentityDbContext<ApiUser>
     {
@@ -13,6 +15,7 @@ namespace GraphQLDemo.API.Models
         public DbSet<Course> Courses { get; set; }
         public DbSet<Instructor> Instructors { get; set; }
         public DbSet<Student> Students { get; set; }
+        public DbSet<Permission> Permissions { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -39,6 +42,13 @@ namespace GraphQLDemo.API.Models
                     Name = "User",
                     NormalizedName = "USER",
                 }
+            );
+
+            builder.Entity<Permission>().HasData(
+                new Permission { Id = Guid.NewGuid(), Name = "Permissions.Create" },
+                new Permission { Id = Guid.NewGuid(), Name = "Permissions.View" },
+                new Permission { Id = Guid.NewGuid(), Name = "Permissions.Edit" },
+                new Permission { Id = Guid.NewGuid(), Name = "Permissions.Delete" }
             );
         }
     }

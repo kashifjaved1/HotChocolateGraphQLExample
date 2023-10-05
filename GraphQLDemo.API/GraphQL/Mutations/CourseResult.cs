@@ -1,5 +1,5 @@
-﻿using GraphQLDemo.API.GraphQL.Types;
-using GraphQLDemo.API.Models.Common;
+﻿using GraphQLDemo.API.Data.Common;
+using GraphQLDemo.API.GraphQL.Types;
 using System;
 
 namespace GraphQLDemo.API.GraphQL.Mutations

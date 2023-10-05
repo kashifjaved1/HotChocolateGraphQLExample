@@ -1,10 +1,5 @@
-﻿using GraphQLDemo.API.Models;
-using GraphQLDemo.API.Models.Common;
-using GraphQLDemo.API.GraphQL.Queries;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+﻿using System;
+using GraphQLDemo.API.Data.Common;
 
 namespace GraphQLDemo.API.GraphQL.Mutations
 {

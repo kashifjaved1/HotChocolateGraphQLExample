@@ -1,4 +1,4 @@
-﻿using GraphQLDemo.API.Models.Entities;
+﻿using GraphQLDemo.API.Data.Entities;
 using GraphQLDemo.API.Repositories.Implementation;
 using GreenDonut;
 using HotChocolate.DataLoader;

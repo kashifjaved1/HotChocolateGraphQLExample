@@ -1,7 +1,7 @@
-﻿using GraphQLDemo.API.GraphQL.Types;
+﻿using GraphQLDemo.API.Data;
+using GraphQLDemo.API.Data.Entities;
+using GraphQLDemo.API.GraphQL.Types;
 using GraphQLDemo.API.Helpers;
-using GraphQLDemo.API.Models;
-using GraphQLDemo.API.Models.Entities;
 using GraphQLDemo.API.Services.Interfaces;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Configuration;
@@ -21,11 +21,13 @@ namespace GraphQLDemo.API.Services.Implementation
         private readonly UserManager<ApiUser> _userManager;
         private readonly IConfiguration _configuration;
         private ApiUser _user;
+        private readonly SchoolDbContext _context;
 
-        public AuthManager(UserManager<ApiUser> userManager, IConfiguration configuration)
+        public AuthManager(UserManager<ApiUser> userManager, IConfiguration configuration, SchoolDbContext context)
         {
             _userManager = userManager;
             _configuration = configuration;
+            _context = context;
         }
 
         private SigningCredentials GetSigningCredentials()
@@ -52,8 +54,8 @@ namespace GraphQLDemo.API.Services.Implementation
             {
                 claims.Add(new Claim(ClaimTypes.Role, role));
             }
-
-            var permissions = GetUserValidPermissions(new() { "create", "view" });
+            
+            var permissions = await GetUserValidPermissions(_user.Permissions.Split(',').ToList());
             foreach (var permission in permissions)
             {
                 claims.Add(new Claim("Permissions", permission));
@@ -89,15 +91,16 @@ namespace GraphQLDemo.API.Services.Implementation
             return _user != null && await _userManager.CheckPasswordAsync(_user, login.Password);
         }
 
-        private List<string> GetUserValidPermissions(List<string> permissions)
+        private async Task<List<string>> GetUserValidPermissions(List<string> permissions)
         {
             permissions = Commons.CapsFirstLetter(permissions);
 
-            var _permissions = Permissions.GetAllPermissions();
+            PermissionHelper.InitializeContext(_context);
+            var _permissions = await PermissionHelper.GetPermissionsFromDB();
 
-            var userPermissions = permissions
-            .Where(p => _permissions.Contains($"Permissions.{p}", StringComparer.OrdinalIgnoreCase))
-            .ToList();
+            //var userPermissions = permissions
+            //.Where(p => _permissions.Contains($"Permissions.{p}", StringComparer.OrdinalIgnoreCase))
+            //.ToList();
             // OR
             var userLongPermissions = _permissions
             .Where(p => permissions.Contains(p.Replace("Permissions.", ""), StringComparer.OrdinalIgnoreCase))

@@ -1,7 +1,7 @@
 ﻿using AppAny.HotChocolate.FluentValidation;
 using FluentValidation.Results;
+using GraphQLDemo.API.Data.Entities;
 using GraphQLDemo.API.GraphQL.Types;
-using GraphQLDemo.API.Models.Entities;
 using GraphQLDemo.API.Repositories.Implementation;
 using GraphQLDemo.API.Services.Interfaces;
 using GraphQLDemo.API.Validators;
@@ -50,7 +50,8 @@ namespace GraphQLDemo.API.GraphQL.Mutations
                     {
                         FullName = signUp.FullName,
                         UserName = signUp.Email,
-                        Email = signUp.Email
+                        Email = signUp.Email,
+                        Permissions = string.Join(",", signUp.Permissions)
                     };
 
                     var result = await _userManager.CreateAsync(user, signUp.Password);

@@ -1,10 +1,10 @@
 ﻿using AppAny.HotChocolate.FluentValidation;
 using FluentValidation.AspNetCore;
+using GraphQLDemo.API.Data;
+using GraphQLDemo.API.Data.Entities;
 using GraphQLDemo.API.GraphQL.Mutations;
 using GraphQLDemo.API.GraphQL.Queries;
 using GraphQLDemo.API.GraphQL.Types;
-using GraphQLDemo.API.Models;
-using GraphQLDemo.API.Models.Entities;
 using GraphQLDemo.API.Repositories.Implementation;
 using GraphQLDemo.API.Services.Helpers;
 using GraphQLDemo.API.Services.Implementation;

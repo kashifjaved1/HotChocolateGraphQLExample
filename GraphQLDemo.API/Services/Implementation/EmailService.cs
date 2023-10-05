@@ -4,8 +4,9 @@ using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using GraphQLDemo.API.Services.Helpers;
+using GraphQLDemo.API.Services.Interfaces;
 
-namespace GraphQLDemo.API.Services.Interfaces
+namespace GraphQLDemo.API.Services.Implementation
 {
     public class EmailSender : IEmailSender
     {

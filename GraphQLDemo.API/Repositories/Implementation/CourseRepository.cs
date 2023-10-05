@@ -1,5 +1,5 @@
-﻿using GraphQLDemo.API.Models;
-using GraphQLDemo.API.Models.Entities;
+﻿using GraphQLDemo.API.Data;
+using GraphQLDemo.API.Data.Entities;
 using GraphQLDemo.API.Repositories.Interfaces;
 using HotChocolate;
 using Microsoft.EntityFrameworkCore;

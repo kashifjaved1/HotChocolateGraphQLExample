@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 
 namespace GraphQLDemo.API.GraphQL.Types
 {
@@ -16,5 +17,7 @@ namespace GraphQLDemo.API.GraphQL.Types
         public string Password { get; set; }
         [Required]
         public string Role { get; set; }
+        [Required]
+        public List<string> Permissions { get; set; }
     }
 }

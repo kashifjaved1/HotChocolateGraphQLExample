@@ -1,6 +1,6 @@
-﻿using GraphQLDemo.API.GraphQL.Types;
-using GraphQLDemo.API.Models;
-using GraphQLDemo.API.Models.Entities;
+﻿using GraphQLDemo.API.Data;
+using GraphQLDemo.API.Data.Entities;
+using GraphQLDemo.API.GraphQL.Types;
 using GraphQLDemo.API.Services.Helpers;
 using GraphQLDemo.API.Services.Interfaces;
 using HotChocolate;

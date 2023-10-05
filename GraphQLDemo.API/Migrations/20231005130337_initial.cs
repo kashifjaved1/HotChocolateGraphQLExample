@@ -3,7 +3,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace GraphQLDemo.API.Migrations
 {
-    public partial class initdb : Migration
+    public partial class initial : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -27,6 +27,7 @@ namespace GraphQLDemo.API.Migrations
                 {
                     Id = table.Column<string>(type: "TEXT", nullable: false),
                     FullName = table.Column<string>(type: "TEXT", nullable: true),
+                    Permissions = table.Column<string>(type: "TEXT", nullable: true),
                     UserName = table.Column<string>(type: "TEXT", maxLength: 256, nullable: true),
                     NormalizedUserName = table.Column<string>(type: "TEXT", maxLength: 256, nullable: true),
                     Email = table.Column<string>(type: "TEXT", maxLength: 256, nullable: true),
@@ -59,6 +60,18 @@ namespace GraphQLDemo.API.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Instructors", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Permissions",
+                columns: table => new
+                {
+                    Id = table.Column<Guid>(type: "TEXT", nullable: false),
+                    Name = table.Column<string>(type: "TEXT", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Permissions", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
@@ -228,32 +241,32 @@ namespace GraphQLDemo.API.Migrations
             migrationBuilder.InsertData(
                 table: "AspNetRoles",
                 columns: new[] { "Id", "ConcurrencyStamp", "Name", "NormalizedName" },
-                values: new object[] { "60c68447-2e98-4572-8248-ceb8e15bd7ca", "35de5e0a-9822-4e19-8858-68b0d3556318", "Admin", "ADMIN" });
+                values: new object[] { "325c2d21-c05a-4424-8b21-8413aa927147", "6331bc17-d1be-4e79-bd9a-802d0eab9e09", "Admin", "ADMIN" });
 
             migrationBuilder.InsertData(
                 table: "AspNetRoles",
                 columns: new[] { "Id", "ConcurrencyStamp", "Name", "NormalizedName" },
-                values: new object[] { "6c81a98d-4ee2-4d4e-bda7-f0f8b5f8f8b7", "c9c654ec-2e4c-40b8-8bf5-b9d8aa49a68b", "User", "USER" });
+                values: new object[] { "6ff60020-bcbd-484f-aa74-a0d6716be960", "452bc9a5-6100-4767-85dc-bb2cab692d61", "User", "USER" });
 
             migrationBuilder.InsertData(
-                table: "Instructors",
-                columns: new[] { "Id", "FirstName", "LastName", "Salary" },
-                values: new object[] { new Guid("e56bc20e-5140-40b9-9871-955a3f697bba"), "Steve", "Job", 100000.0 });
+                table: "Permissions",
+                columns: new[] { "Id", "Name" },
+                values: new object[] { new Guid("37ec49c5-d040-4e73-ae22-28b72fa840ea"), "Permissions.Create" });
 
             migrationBuilder.InsertData(
-                table: "Instructors",
-                columns: new[] { "Id", "FirstName", "LastName", "Salary" },
-                values: new object[] { new Guid("1f9bd071-7ebe-42a8-acef-a6acee728172"), "Mark", "Zuckerberg", 100000.0 });
+                table: "Permissions",
+                columns: new[] { "Id", "Name" },
+                values: new object[] { new Guid("b41096cc-149c-443b-9788-6241cd7cd489"), "Permissions.View" });
 
             migrationBuilder.InsertData(
-                table: "Students",
-                columns: new[] { "Id", "FirstName", "GPA", "LastName" },
-                values: new object[] { new Guid("0913c2c9-9ab6-4803-8a6f-f92c8c03755b"), "Micheal", 3.5, "Faraday" });
+                table: "Permissions",
+                columns: new[] { "Id", "Name" },
+                values: new object[] { new Guid("3098985d-4a44-4323-b7eb-1b6d9d2123fe"), "Permissions.Edit" });
 
             migrationBuilder.InsertData(
-                table: "Students",
-                columns: new[] { "Id", "FirstName", "GPA", "LastName" },
-                values: new object[] { new Guid("3209b316-aa8a-44ea-a4e3-2762ee96da15"), "Graham", 3.7999999999999998, "Bell" });
+                table: "Permissions",
+                columns: new[] { "Id", "Name" },
+                values: new object[] { new Guid("2d698034-a1fb-4bb1-80ef-c7425480e7d4"), "Permissions.Delete" });
 
             migrationBuilder.CreateIndex(
                 name: "IX_AspNetRoleClaims_RoleId",
@@ -322,6 +335,9 @@ namespace GraphQLDemo.API.Migrations
 
             migrationBuilder.DropTable(
                 name: "CourseStudent");
+
+            migrationBuilder.DropTable(
+                name: "Permissions");
 
             migrationBuilder.DropTable(
                 name: "AspNetRoles");

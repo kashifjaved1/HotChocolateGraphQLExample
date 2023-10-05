@@ -1,6 +1,6 @@
-﻿using GraphQLDemo.API.DataLoader;
-using GraphQLDemo.API.Models.Common;
-using GraphQLDemo.API.Models.Entities;
+﻿using GraphQLDemo.API.Data.Common;
+using GraphQLDemo.API.Data.Entities;
+using GraphQLDemo.API.DataLoader;
 using HotChocolate;
 using HotChocolate.Data;
 using System;

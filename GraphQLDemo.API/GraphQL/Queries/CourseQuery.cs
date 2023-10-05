@@ -1,8 +1,6 @@
 ﻿using GraphQLDemo.API.GraphQL.Filters;
 using GraphQLDemo.API.GraphQL.Sorters;
 using GraphQLDemo.API.GraphQL.Types;
-using GraphQLDemo.API.Models.Entities;
-using GraphQLDemo.API.Models;
 using HotChocolate.Data;
 using HotChocolate;
 using HotChocolate.Types;
@@ -12,6 +10,8 @@ using System.Threading.Tasks;
 using System;
 using GraphQLDemo.API.Repositories.Implementation;
 using GraphQLDemo.API.Attributes;
+using GraphQLDemo.API.Data;
+using GraphQLDemo.API.Data.Entities;
 
 namespace GraphQLDemo.API.GraphQL.Queries
 {

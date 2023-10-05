@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace GraphQLDemo.API.Models.Common
+namespace GraphQLDemo.API.Data.Common
 {
     public enum Subject
     {

@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace GraphQLDemo.API.Models.Entities
+namespace GraphQLDemo.API.Data.Entities
 {
     public class Student
     {

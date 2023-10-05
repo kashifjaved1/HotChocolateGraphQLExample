@@ -1,3 +1,5 @@
+using GraphQLDemo.API.Data;
+using GraphQLDemo.API.Data.Entities;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;

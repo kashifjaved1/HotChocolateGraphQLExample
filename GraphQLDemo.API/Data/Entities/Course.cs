@@ -1,8 +1,8 @@
-﻿using GraphQLDemo.API.Models.Common;
+﻿using GraphQLDemo.API.Data.Common;
 using System;
 using System.Collections.Generic;
 
-namespace GraphQLDemo.API.Models.Entities
+namespace GraphQLDemo.API.Data.Entities
 {
     public class Course
     {
